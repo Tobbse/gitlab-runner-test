@@ -1,0 +1,8 @@
+<project name="test">
+	<target name="test">
+		<javac srcdir="." destdir="." debug="on" source="1.7" includeantruntime="false"/>
+		<java classname = "Main">
+			<classpath path="."></classpath>
+		</java>
+	</target>
+</project>
