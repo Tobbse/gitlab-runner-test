@@ -12,7 +12,7 @@ public class Main {
 		String date = formatter.format(new Date());
 
 		try {
-			Files.write(Paths.get("testfile" + date + ".txt"), Arrays.asList("test"));
+			Files.write(Paths.get("output/testfile" + date + ".txt"), Arrays.asList("test"));
 			System.out.println("File created.");
 		} catch (Exception e) {
 			System.out.println("Error creating file!");

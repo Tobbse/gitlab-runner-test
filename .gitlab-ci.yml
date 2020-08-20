@@ -1,0 +1,28 @@
+image: sgrio/ant:latest
+
+stages:
+  - build
+
+build:
+  stage: build
+  before_script:
+    - apt-get update
+    - apt-get -y install git
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$RUNNER_SSH_PRIVATE_KEY")
+    - mkdir -p ~/.ssh
+    - ssh-keyscan -H 'gitlab.com' >> ~/.ssh/known_hosts
+    - ssh-keyscan gitlab.com | sort -u - ~/.ssh/known_hosts -o ~/.ssh/known_hosts
+    - '[[ -f /.dockerinit ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - git config --global user.name ant-test-gitlab-runner
+    - git config --global user.email email@example.com
+  script:
+    - mkdir output
+    - ant test
+    - git add output
+    - git commit -m "Publishing new files"
+    - git remote rm origin && git remote add origin git@gitlab.com:tob.jansing/gitlab-runner-test.git
+    - git push origin HEAD:master -o ci.skip
+  only:
+    - master
