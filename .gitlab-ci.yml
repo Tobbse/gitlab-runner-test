@@ -18,7 +18,7 @@ build:
     - git config --global user.name ant-test-gitlab-runner
     - git config --global user.email git@gitlab.com
   script:
-    - mkdir output
+    - mkdir -p output
     - ant test
     - git add output
     - git commit -m "Publishing new files"
